@@ -1,17 +1,17 @@
-name: .NET Core
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-on: [push]
+trigger:
+- master
 
-jobs:
-  build:
+pool:
+  vmImage: 'ubuntu-latest'
 
-    runs-on: ubuntu-latest
+variables:
+  buildConfiguration: 'Release'
 
-    steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
+steps:
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
