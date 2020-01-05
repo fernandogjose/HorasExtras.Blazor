@@ -1,0 +1,60 @@
+﻿@using HorasExtra.Blazor.PagesServices
+@using HorasExtra.Application.ViewModels
+
+@layout LoginLayout
+
+@page "/login"
+@page "/"
+
+@inject LoginPageService LoginPageService
+@inject NavigationManager NavigationManager
+@inject UsuarioPageService UsuarioPageService
+
+<EditForm Model="@Model" OnValidSubmit="@ValidSubmit">
+    <div>
+        <br /><br /><br /><br /><br />
+    </div>
+    <div>
+        <h3 style="font-weight:bold; color:purple">Book Stores Login</h3>
+    </div>
+    <div>
+        <br />
+    </div>
+    <div class="col-12 row">
+        <input class="form-control col-12" @bind="Model.Email" placeholder="email address" />
+    </div>
+    <br />
+    <div class="col-12 row">
+        <input type="password" class="form-control col-12" @bind="Model.Senha" placeholder="password" />
+    </div>
+    <br />
+    <div class="col-12 row">
+        <span class="col-12"></span>
+        <input type="submit" class="form-control col-6 btn btn-primary" value="Login" />
+        <a href="/signup" class="col-3">Sign up</a>
+    </div>
+
+    <button type="button" class="btn btn-success" @onclick="AdicionarUsuario">Adicionar Usuário</button>
+
+</EditForm>
+
+@code {
+
+    private LoginRequestViewModel Model = new LoginRequestViewModel();
+
+    private void ValidSubmit()
+    {
+        LoginPageService.LogIn(Model);
+        NavigationManager.NavigateTo("/dashboard");
+    }
+
+    private void AdicionarUsuario()
+    {
+        UsuarioPageService.Adicionar(new UsuarioCadastrarRequestViewModel
+        {
+            Nome = "Reginaldo Pinheiro",
+            Email = "v.pinheiro@avivatec.com.br",
+            Senha = "g716iso2"
+        });
+    }
+}

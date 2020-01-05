@@ -1,0 +1,133 @@
+﻿@using HorasExtra.Blazor.PagesServices
+@using HorasExtra.Application.ViewModels
+
+@page "/horas/cadastrar"
+@page "/horas/cadastrar/{id}"
+
+@attribute [Authorize]
+
+@inject HorasPageService HorasPageService
+@inject NavigationManager NavigationManager
+@inject UsuarioPageService UsuarioPageService
+
+<h1>Apontamento de Horas</h1>
+
+<EditForm OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit" EditContext="@EditContext">
+    <div class="form-group">
+        <label>Desenvolvedor</label>
+        <InputText id="desenvolvedor" class="form-control" @bind-Value="Model.Desenvolvedor" disabled="disabled" />
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label>Data</label>
+            <InputDate id="data" class="form-control" @bind-Value="Model.Data" />
+        </div>
+        <div class="form-group col-md-4">
+            <label>Hora Inicio</label>
+            <InputText id="horaInicio" class="form-control" @bind-Value="Model.HoraInicio" />
+        </div>
+        <div class="form-group col-md-4">
+            <label>Hora Fim</label>
+            <InputText id="horaFim" class="form-control" @bind-Value="Model.HoraFim" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button> &nbsp;
+    <a href="/horas" class="btn btn-danger">Voltar</a>
+
+    <DataAnnotationsValidator />
+
+    @if (!FormValid)
+    {
+        <div class="alert alert-danger top-15" role="alert">
+            <ValidationSummary />
+        </div>
+    }
+</EditForm>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+    private System.Security.Claims.ClaimsPrincipal claimsPrincipal;
+
+    private EditContext EditContext;
+    private bool FormValid = true;
+    private bool FormSubmit = false;
+    private HorasCadastrarRequestViewModel Model = new HorasCadastrarRequestViewModel();
+
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            Model.Data = DateTime.Now;
+        }
+        else
+        {
+            HorasObterResponseViewModel response = HorasPageService.Obter(id);
+            Model.Id = response.Id;
+            Model.Desenvolvedor = response.Desenvolvedor;
+            Model.Data = response.Data;
+            Model.HoraInicio = response.HoraInicio;
+            Model.HoraFim = response.HoraFim;
+        }
+
+        EditContext = new EditContext(Model);
+        EditContext.OnFieldChanged += EditContext_OnFieldChanged;
+
+        base.OnInitialized();
+    }
+
+    protected async override void OnParametersSet()
+    {
+        if (authenticationState != null)
+        {
+            claimsPrincipal = (await authenticationState).User;
+            Model.Desenvolvedor = claimsPrincipal.Identity.Name;
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        SetFormValid();
+        base.OnAfterRender(firstRender);
+    }
+
+    private void EditContext_OnFieldChanged(object sender, FieldChangedEventArgs e)
+    {
+        SetFormValid();
+    }
+
+    private void SetFormValid()
+    {
+        FormValid = EditContext.Validate() || !FormSubmit;
+    }
+
+    private void SetSubmit()
+    {
+        FormSubmit = true;
+    }
+
+    private void HandleValidSubmit()
+    {
+        try
+        {
+            SetSubmit();
+            HorasPageService.Adicionar(Model);
+            NavigationManager.NavigateTo("/horas");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        SetSubmit();
+        SetFormValid();
+    }
+}

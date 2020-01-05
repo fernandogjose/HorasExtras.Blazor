@@ -1,0 +1,28 @@
+﻿@using HorasExtra.Blazor.Providers
+
+@inherits LayoutComponentBase
+
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="top-row px-4">
+        <button class="btn btn-link" @onclick="LogOut">Sair</button>
+    </div>
+
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+@code{
+    private void LogOut()
+    {
+        ((CustomAuthenticationStateProvider)AuthenticationStateProvider).LogOut();
+        NavigationManager.NavigateTo("/");
+    }
+}
