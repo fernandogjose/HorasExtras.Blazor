@@ -12,20 +12,20 @@
 
 <h1>Apontamento de Horas</h1>
 
-<EditForm OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit" EditContext="@EditContext">
+<EditForm OnValidSubmit="@ValidSubmit" OnInvalidSubmit="@InvalidSubmit" Model="@request">
     <div class="form-group">
         <label>Desenvolvedor</label>
-        <InputText id="desenvolvedor" class="form-control" @bind-Value="Model.Desenvolvedor" disabled="disabled" />
+        <InputText id="desenvolvedor" class="form-control" @bind-Value="request.Desenvolvedor" disabled="disabled" />
     </div>
 
     <div class="form-row">
         <div class="form-group col-md-4">
             <label>Data</label>
-            <InputDate id="data" class="form-control" @bind-Value="Model.Data" />
+            <InputDate id="data" class="form-control" @bind-Value="request.Data" />
         </div>
         <div class="form-group col-md-4">
             <label>Hora Inicio</label>
-            <InputSelect id="horaInicio" @bind-Value="Model.HoraInicio" class="form-control">
+            <InputSelect id="horaInicio" @bind-Value="request.HoraInicio" class="form-control">
                 <option value="">Selecione</option>
                 <option value="00:00">00:00</option>
                 <option value="00:30">00:30</option>
@@ -80,7 +80,7 @@
         </div>
         <div class="form-group col-md-4">
             <label>Hora Fim</label>
-            <InputSelect id="horaFim" @bind-Value="Model.HoraFim" class="form-control">
+            <InputSelect id="horaFim" @bind-Value="request.HoraFim" class="form-control">
                 <option value="">Selecione</option>
                 <option value="00:00">00:00</option>
                 <option value="00:30">00:30</option>
@@ -140,7 +140,7 @@
 
     <DataAnnotationsValidator />
 
-    @if (!FormValid)
+    @if (!formularioValido)
     {
         <div class="alert alert-danger top-15" role="alert">
             <ValidationSummary />
@@ -154,31 +154,27 @@
 
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
-    private System.Security.Claims.ClaimsPrincipal claimsPrincipal;
 
-    private EditContext EditContext;
-    private bool FormValid = true;
-    private bool FormSubmit = false;
-    private HorasCadastrarRequestViewModel Model = new HorasCadastrarRequestViewModel();
+    private System.Security.Claims.ClaimsPrincipal claimsPrincipal;
+    private bool formularioValido = true;
+    private bool formularioSubmetido = false;
+    private HorasCadastrarRequestViewModel request = new HorasCadastrarRequestViewModel();
 
     protected override void OnInitialized()
     {
         if (string.IsNullOrEmpty(id))
         {
-            Model.Data = DateTime.Now;
+            request.Data = DateTime.Now;
         }
         else
         {
             HorasObterResponseViewModel response = HorasPageService.Obter(id);
-            Model.Id = response.Id;
-            Model.Desenvolvedor = response.Desenvolvedor;
-            Model.Data = response.Data;
-            Model.HoraInicio = response.HoraInicio;
-            Model.HoraFim = response.HoraFim;
+            request.Id = response.Id;
+            request.Desenvolvedor = response.Desenvolvedor;
+            request.Data = response.Data;
+            request.HoraInicio = response.HoraInicio;
+            request.HoraFim = response.HoraFim;
         }
-
-        EditContext = new EditContext(Model);
-        EditContext.OnFieldChanged += EditContext_OnFieldChanged;
 
         base.OnInitialized();
     }
@@ -188,48 +184,46 @@
         if (authenticationState != null)
         {
             claimsPrincipal = (await authenticationState).User;
-            Model.Desenvolvedor = claimsPrincipal.Identity.Name;
+            request.Desenvolvedor = claimsPrincipal.Identity.Name;
         }
     }
 
     protected override void OnAfterRender(bool firstRender)
     {
-        SetFormValid();
+        SetFormulatioValido(true);
         base.OnAfterRender(firstRender);
     }
 
-    private void EditContext_OnFieldChanged(object sender, FieldChangedEventArgs e)
+    private void SetFormulatioSubmetido()
     {
-        SetFormValid();
+        formularioSubmetido = true;
     }
 
-    private void SetFormValid()
+    private void SetFormulatioValido(bool valido)
     {
-        FormValid = EditContext.Validate() || !FormSubmit;
+        formularioValido = valido;
     }
 
-    private void SetSubmit()
+    private void ValidSubmit()
     {
-        FormSubmit = true;
-    }
+        SetFormulatioValido(true);
+        SetFormulatioSubmetido();
 
-    private void HandleValidSubmit()
-    {
-        try
+        if(string.IsNullOrEmpty(request.Id))
         {
-            SetSubmit();
-            HorasPageService.Adicionar(Model);
-            NavigationManager.NavigateTo("/horas");
+            HorasPageService.Adicionar(request);
         }
-        catch (Exception ex)
+        else
         {
-
+            HorasPageService.Editar(request);
         }
+
+        NavigationManager.NavigateTo("/horas");
     }
 
-    private void HandleInvalidSubmit()
+    private void InvalidSubmit()
     {
-        SetSubmit();
-        SetFormValid();
+        SetFormulatioSubmetido();
+        SetFormulatioValido(false);
     }
 }

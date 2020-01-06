@@ -10,5 +10,7 @@ namespace HorasExtra.Domain.Interfaces.Repositories
         List<Horas> Listar(Horas request);
 
         void Adicionar(Horas request);
+
+        void Editar(Horas request);
     }
 }

@@ -30,5 +30,10 @@ namespace HorasExtra.Domain.Services
             List<Horas> response = _horasRepository.Listar(request);
             return response;
         }
+
+        public void Editar(Horas request)
+        {
+            _horasRepository.Editar(request);
+        }
     }
 }

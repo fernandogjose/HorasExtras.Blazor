@@ -411,3 +411,9 @@ app {
         transform: scale3D(0, 0, 1);
     }
 }
+
+/* Fim */
+
+.btn {
+    min-width: 80px;
+}

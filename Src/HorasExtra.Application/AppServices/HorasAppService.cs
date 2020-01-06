@@ -1,4 +1,5 @@
 ﻿using HorasExtra.Application.Interfaces;
+using HorasExtra.Application.Mappers;
 using HorasExtra.Application.ViewModels;
 using HorasExtra.Domain.Interfaces.Services;
 using HorasExtra.Domain.Models;
@@ -11,24 +12,18 @@ namespace HorasExtra.Application.AppServices
     public class HorasAppService : IHorasAppService
     {
         private readonly IHorasService _horasService;
+        private readonly HorasMapper _horasMapper;
 
-        public HorasAppService(IHorasService horasService)
+        public HorasAppService(IHorasService horasService, HorasMapper horasMapper)
         {
             _horasService = horasService;
+            _horasMapper = horasMapper;
         }
 
         public HorasCadastrarResponseViewModel Adicionar(HorasCadastrarRequestViewModel request)
         {
-            Horas requestDomain = new Horas
-            {
-                Desenvolvedor = request.Desenvolvedor,
-                Data = request.Data,
-                HoraInicio = request.HoraInicio,
-                HoraFim = request.HoraFim
-            };
-
+            Horas requestDomain = _horasMapper.DeViewModelParaModel(request);
             _horasService.Adicionar(requestDomain);
-
             HorasCadastrarResponseViewModel response = new HorasCadastrarResponseViewModel();
             return response;
         }
@@ -40,38 +35,24 @@ namespace HorasExtra.Application.AppServices
 
         public HorasCadastrarResponseViewModel Editar(HorasCadastrarRequestViewModel request)
         {
-            throw new NotImplementedException();
+            Horas requestModel = _horasMapper.DeViewModelParaModel(request);
+            _horasService.Editar(requestModel);
+            HorasCadastrarResponseViewModel response = new HorasCadastrarResponseViewModel();
+            return response;
         }
 
         public HorasObterResponseViewModel Obter(string id)
         {
-            Horas responseDomain = _horasService.Obter(id);
-            HorasObterResponseViewModel response = new HorasObterResponseViewModel();
-            response.Id = responseDomain.Id;
-            response.Desenvolvedor = responseDomain.Desenvolvedor;
-            response.Data = responseDomain.Data;
-            response.HoraInicio = responseDomain.HoraInicio;
-            response.HoraFim = responseDomain.HoraFim;
-
+            Horas responseModel = _horasService.Obter(id);
+            HorasObterResponseViewModel response = _horasMapper.DeModelParaViewModel(responseModel);
             return response;
         }
 
-        public List<HorasListarResponseViewModel> Listar(HorasListarRequestViewModel request)
+        public List<HorasObterResponseViewModel> Listar(HorasListarRequestViewModel request)
         {
-            Horas requestDomain = new Horas { Desenvolvedor = request.Desenvolvedor };
-            List<Horas> responseDomain = _horasService.Listar(requestDomain);
-            List<HorasListarResponseViewModel> response = new List<HorasListarResponseViewModel>(0);
-            foreach (var horas in responseDomain.OrderBy(x => x.Data))
-            {
-                HorasListarResponseViewModel horasListar = new HorasListarResponseViewModel();
-                horasListar.Id = horas.Id;
-                horasListar.Desenvolvedor = horas.Desenvolvedor;
-                horasListar.Data = horas.Data;
-                horasListar.HoraInicio = horas.HoraInicio;
-                horasListar.HoraFim = horas.HoraFim;
-
-                response.Add(horasListar);
-            }
+            Horas requestModel = new Horas { Desenvolvedor = request.Desenvolvedor };
+            List<Horas> responseModel = _horasService.Listar(requestModel);
+            List<HorasObterResponseViewModel> response = _horasMapper.DeModelParaViewModel(responseModel);
 
             return response;
         }

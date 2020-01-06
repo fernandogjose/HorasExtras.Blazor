@@ -44,6 +44,7 @@ namespace HorasExtra.Blazor
 
             services.AddTransient<LoginMapper>();
             services.AddTransient<ErroMapper>();
+            services.AddTransient<HorasMapper>();
 
             services.AddTransient<IHorasAppService, HorasAppService>();
             services.AddTransient<ILoginAppService, LoginAppService>();

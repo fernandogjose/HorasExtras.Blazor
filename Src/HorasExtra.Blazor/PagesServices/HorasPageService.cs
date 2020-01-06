@@ -19,15 +19,21 @@ namespace HorasExtra.Blazor.PagesServices
             return response;
         }
 
-        public List<HorasListarResponseViewModel> Listar(HorasListarRequestViewModel request)
+        public List<HorasObterResponseViewModel> Listar(HorasListarRequestViewModel request)
         {
-            List<HorasListarResponseViewModel> response = _horasAppService.Listar(request);
+            List<HorasObterResponseViewModel> response = _horasAppService.Listar(request);
             return response;
         }
 
         public HorasCadastrarResponseViewModel Adicionar(HorasCadastrarRequestViewModel request)
         {
             HorasCadastrarResponseViewModel response = _horasAppService.Adicionar(request);
+            return response;
+        }
+
+        public HorasCadastrarResponseViewModel Editar(HorasCadastrarRequestViewModel request)
+        {
+            HorasCadastrarResponseViewModel response = _horasAppService.Editar(request);
             return response;
         }
     }

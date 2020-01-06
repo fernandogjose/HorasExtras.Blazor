@@ -41,19 +41,6 @@ namespace HorasExtra.Application.ViewModels
         public string HoraFim { get; set; }
     }
 
-    public class HorasListarResponseViewModel
-    {
-        public string Id { get; set; }
-
-        public string Desenvolvedor { get; set; }
-
-        public DateTime Data { get; set; }
-
-        public string HoraInicio { get; set; }
-
-        public string HoraFim { get; set; }
-    }
-
     public class HorasListarRequestViewModel
     {
         public string Desenvolvedor { get; set; }

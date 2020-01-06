@@ -79,5 +79,18 @@ namespace HorasExtra.Repository.Repositories
 
             _collection.InsertOne(bsonDocumentRequest);
         }
+
+        public void Editar(Horas request)
+        {
+            FilterDefinitionBuilder<BsonDocument> builder = Builders<BsonDocument>.Filter;
+            FilterDefinition<BsonDocument> filter = builder.Eq("_id", ObjectId.Parse(request.Id));
+            UpdateDefinition<BsonDocument> bsonDocumentRequest = Builders<BsonDocument>.Update
+                .Set("Desenvolvedor", request.Desenvolvedor.ToString())
+                .Set("Data", request.Data.ToShortDateString())
+                .Set("HoraInicio", request.HoraInicio.ToString())
+                .Set("HoraFim", request.HoraFim.ToString());
+
+            _collection.UpdateOne(filter, bsonDocumentRequest);
+        }
     }
 }

@@ -37,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (HorasListarResponseViewModel hora in horas)
+                    @foreach (HorasObterResponseViewModel hora in horas)
                     {
                         <tr>
                             <td>@hora.Desenvolvedor</td>
@@ -57,8 +57,7 @@
     [CascadingParameter]
     private Task<AuthenticationState> authenticationState { get; set; }
     private System.Security.Claims.ClaimsPrincipal claimsPrincipal;
-
-    List<HorasListarResponseViewModel> horas = new List<HorasListarResponseViewModel>();
+    private List<HorasObterResponseViewModel> horas = new List<HorasObterResponseViewModel>(0);
 
     protected override async void OnInitialized()
     {

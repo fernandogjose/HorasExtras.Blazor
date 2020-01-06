@@ -7,7 +7,7 @@ namespace HorasExtra.Application.Interfaces
     {
         HorasObterResponseViewModel Obter(string id);
 
-        List<HorasListarResponseViewModel> Listar(HorasListarRequestViewModel request);
+        List<HorasObterResponseViewModel> Listar(HorasListarRequestViewModel request);
 
         HorasCadastrarResponseViewModel Adicionar(HorasCadastrarRequestViewModel request);
 
