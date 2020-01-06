@@ -10,51 +10,119 @@
 @inject NavigationManager NavigationManager
 @inject UsuarioPageService UsuarioPageService
 
-<EditForm Model="@Model" OnValidSubmit="@ValidSubmit">
-    <div>
-        <br /><br /><br /><br /><br />
-    </div>
-    <div>
-        <h3 style="font-weight:bold; color:purple">Book Stores Login</h3>
-    </div>
-    <div>
-        <br />
-    </div>
-    <div class="col-12 row">
-        <input class="form-control col-12" @bind="Model.Email" placeholder="email address" />
-    </div>
-    <br />
-    <div class="col-12 row">
-        <input type="password" class="form-control col-12" @bind="Model.Senha" placeholder="password" />
-    </div>
-    <br />
-    <div class="col-12 row">
-        <span class="col-12"></span>
-        <input type="submit" class="form-control col-6 btn btn-primary" value="Login" />
-        <a href="/signup" class="col-3">Sign up</a>
-    </div>
+<section class="login-block">
+    <div class="container">
+        <div class="row">
 
-    <button type="button" class="btn btn-success" @onclick="AdicionarUsuario">Adicionar Usuário</button>
+            <!-- Login Form -->
+            <div class="col-md-4 login-sec">
+                <h2 class="text-center">Login</h2>
+                <EditForm Model="@_request" OnValidSubmit="@ValidSubmit" OnInvalidSubmit="@InvalidSubmit">
+                    <DataAnnotationsValidator />
 
-</EditForm>
+                    <div class="login-form">
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label class="text-uppercase">E-MAIL</label>
+                            <InputText id="email" class="form-control" @bind-Value="_request.Email" />
+                        </div>
+
+                        <!-- Senha -->
+                        <div class="form-group">
+                            <label class="text-uppercase">SENHA</label>
+                            <InputText id="senha" class="form-control" @bind-Value="_request.Senha" type="password" />
+                        </div>
+
+                        <!-- Botão cadastrar e Entrar -->
+                        <div class="form-group">
+
+                            @if (_carregando)
+                            {
+                                <button class="btn btn-login" disabled="disabled">Entrando...</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-login" @onclick="Carregando">Entrar</button>
+                            }
+
+                            @if (!_formularioValido)
+                            {
+                                <div class="alert alert-danger top-15" role="alert">
+                                    <ValidationSummary />
+
+                                    @if (_response.Erros != null && _response.Erros.Any())
+                                    {
+                                        <ul class="validation-errors erro-customizado">
+                                            @foreach (ErroViewModel erro in _response.Erros)
+                                            {
+                                                <li class="validation-errors">@erro.Descricao</li>
+                                            }
+                                        </ul>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </EditForm>
+                <div class="copy-text">Criado por <i class="fa fa-heart"></i> Fernando José</div>
+            </div>
+            <div class="col-md-8 banner-sec">
+                <div class="carousel-item active">
+                    <img class="d-block img-fluid" src="https://static.pexels.com/photos/33972/pexels-photo.jpg" alt="First slide">
+                    <div class="carousel-caption d-none d-md-block">
+                        <div class="banner-text">
+                            <h2>Horas extras</h2>
+                            <p>Sistema para apontamento de horas extras para os desenvolvedores da Avivatec</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 @code {
-
-    private LoginRequestViewModel Model = new LoginRequestViewModel();
+    private LoginRequestViewModel _request = new LoginRequestViewModel();
+    private LoginResponseViewModel _response = new LoginResponseViewModel();
+    private bool _formularioValido = true;
+    private bool _carregando = false;
 
     private void ValidSubmit()
     {
-        LoginPageService.LogIn(Model);
-        NavigationManager.NavigateTo("/dashboard");
+        _formularioValido = true;
+        _response.Erros = new List<ErroViewModel>();
+        _response = LoginPageService.LogIn(_request);
+
+        // Se usuário encontrado redireciona para o dashboard
+        if (!_response.Erros.Any())
+        {
+            NavigationManager.NavigateTo("/dashboard");
+        }
+
+        // Usuário não encontrado
+        _formularioValido = false;
+        _carregando = false;
     }
 
-    private void AdicionarUsuario()
+    private void InvalidSubmit()
     {
-        UsuarioPageService.Adicionar(new UsuarioCadastrarRequestViewModel
-        {
-            Nome = "Reginaldo Pinheiro",
-            Email = "v.pinheiro@avivatec.com.br",
-            Senha = "g716iso2"
-        });
+        _response.Erros = new List<ErroViewModel>();
+        _formularioValido = false;
     }
+
+    private void Carregando()
+    {
+        _carregando = true;
+    }
+
+    //private void AdicionarUsuario()
+    //{
+    //    UsuarioPageService.Adicionar(new UsuarioCadastrarRequestViewModel
+    //    {
+    //        Nome = "Reginaldo Pinheiro",
+    //        Email = "v.pinheiro@avivatec.com.br",
+    //        Senha = "g716iso2"
+    //    });
+    //}
 }

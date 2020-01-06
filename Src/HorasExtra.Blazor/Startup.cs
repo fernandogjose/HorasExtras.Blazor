@@ -1,12 +1,14 @@
 using Blazored.SessionStorage;
 using HorasExtra.Application.AppServices;
 using HorasExtra.Application.Interfaces;
+using HorasExtra.Application.Mappers;
 using HorasExtra.Blazor.Helpers;
 using HorasExtra.Blazor.PagesServices;
 using HorasExtra.Blazor.Providers;
 using HorasExtra.Domain.Interfaces.Repositories;
 using HorasExtra.Domain.Interfaces.Services;
 using HorasExtra.Domain.Services;
+using HorasExtra.Domain.Validacoes;
 using HorasExtra.Repository.Helpers;
 using HorasExtra.Repository.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -40,9 +42,14 @@ namespace HorasExtra.Blazor
             services.AddTransient<LoginPageService>();
             services.AddTransient<UsuarioPageService>();
 
+            services.AddTransient<LoginMapper>();
+            services.AddTransient<ErroMapper>();
+
             services.AddTransient<IHorasAppService, HorasAppService>();
             services.AddTransient<ILoginAppService, LoginAppService>();
             services.AddTransient<IUsuarioAppService, UsuarioAppService>();
+
+            services.AddTransient<LoginValidacao>();
 
             services.AddTransient<IHorasService, HorasService>();
             services.AddTransient<ILoginService, LoginService>();

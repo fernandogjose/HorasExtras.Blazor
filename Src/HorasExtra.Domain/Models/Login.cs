@@ -1,4 +1,6 @@
-﻿namespace HorasExtra.Domain.Models
+﻿using System.Collections.Generic;
+
+namespace HorasExtra.Domain.Models
 {
     public class Login
     {
@@ -7,5 +9,7 @@
         public string Senha { get; set; }
 
         public string Nome { get; set; }
+
+        public List<Erro> Erros { get; set; }
     }
 }

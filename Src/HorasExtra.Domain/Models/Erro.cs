@@ -1,6 +1,6 @@
-﻿namespace HorasExtra.Application.ViewModels
+﻿namespace HorasExtra.Domain.Models
 {
-    public class ErroViewModel
+    public class Erro
     {
         public int Codigo { get; set; }
 

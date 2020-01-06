@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HorasExtra.Application.ViewModels
 {
@@ -16,5 +17,7 @@ namespace HorasExtra.Application.ViewModels
         public string Nome { get; set; }
 
         public string Email { get; set; }
+
+        public List<ErroViewModel> Erros { get; set; }
     }
 }
