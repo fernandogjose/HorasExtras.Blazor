@@ -135,8 +135,16 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Salvar</button> &nbsp;
-    <a href="/horas" class="btn btn-danger">Voltar</a>
+    @if (carregando)
+    {
+        <button class="btn btn-primary" disabled="disabled">Salvando...</button>
+    }
+    else
+    {
+        <button type="submit" class="btn btn-primary" @onclick="ClickSalvar">Salvar</button>
+    }
+
+    &nbsp;<a href="/horas" class="btn btn-danger">Voltar</a>
 
     <DataAnnotationsValidator />
 
@@ -158,6 +166,7 @@
     private System.Security.Claims.ClaimsPrincipal claimsPrincipal;
     private bool formularioValido = true;
     private bool formularioSubmetido = false;
+    private bool carregando = false;
     private HorasCadastrarRequestViewModel request = new HorasCadastrarRequestViewModel();
 
     protected override void OnInitialized()
@@ -199,9 +208,14 @@
         formularioSubmetido = true;
     }
 
-    private void SetFormulatioValido(bool valido)
+    private void SetFormulatioValido(bool valor)
     {
-        formularioValido = valido;
+        formularioValido = valor;
+    }
+
+    private void SetCarregando(bool valor)
+    {
+        carregando = valor;
     }
 
     private void ValidSubmit()
@@ -209,7 +223,7 @@
         SetFormulatioValido(true);
         SetFormulatioSubmetido();
 
-        if(string.IsNullOrEmpty(request.Id))
+        if (string.IsNullOrEmpty(request.Id))
         {
             HorasPageService.Adicionar(request);
         }
@@ -218,6 +232,7 @@
             HorasPageService.Editar(request);
         }
 
+        SetCarregando(false);
         NavigationManager.NavigateTo("/horas");
     }
 
@@ -225,5 +240,11 @@
     {
         SetFormulatioSubmetido();
         SetFormulatioValido(false);
+        SetCarregando(false);
+    }
+
+    private void ClickSalvar()
+    {
+        SetCarregando(true);
     }
 }
