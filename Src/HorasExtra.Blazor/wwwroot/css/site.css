@@ -417,3 +417,7 @@ app {
 .btn {
     min-width: 80px;
 }
+
+.alinhamento-direira {
+    text-align: right;
+}

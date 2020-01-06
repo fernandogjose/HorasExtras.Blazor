@@ -7,9 +7,9 @@
 
 <div class="row">
     <div class="col-10">
-        <h1>Apontamento de Horas</h1>
+        <h1>Apontamento de Horas Extras</h1>
     </div>
-    <div class="col-2">
+    <div class="col-2 alinhamento-direira">
         <a href="/horas/cadastrar" class="btn btn-success">Novo</a>
     </div>
 </div>
@@ -27,10 +27,10 @@
         else
         {
             <table class="table">
-                <thead>
+                <thead class="thead-light">
                     <tr>
                         <th>Desenvolvedor</th>
-                        <th>Dia</th>
+                        <th>Data</th>
                         <th>Hora Inicio</th>
                         <th>Hora Fim</th>
                         <th></th>
@@ -44,7 +44,9 @@
                             <td>@hora.Data.ToShortDateString()</td>
                             <td>@hora.HoraInicio</td>
                             <td>@hora.HoraFim</td>
-                            <td><a class="btn btn-primary" href="/horas/cadastrar/@hora.Id">Editar</a></td>
+                            <td class="alinhamento-direira">
+                                <a class="btn btn-primary" href="/horas/cadastrar/@hora.Id">Editar</a>
+                            </td>
                         </tr>
                     }
                 </tbody>
