@@ -6,16 +6,16 @@
 @inject HorasPageService HorasPageService
 
 <div class="row">
-    <div class="col-10">
+    <div class="col-md-10">
         <h1>Apontamento de Horas Extras</h1>
     </div>
-    <div class="col-2 alinhamento-direira">
+    <div class="col-md-2 alinhamento-direira">
         <a href="/horas/cadastrar" class="btn btn-success">Novo</a>
     </div>
 </div>
 
 <div class="row top-15">
-    <div class="col-12">
+    <div class="col-12 table-responsive">
         @if (horas == null)
         {
             <p><em>carregando...</em></p>
