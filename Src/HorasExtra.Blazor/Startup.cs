@@ -66,15 +66,6 @@ namespace HorasExtra.Blazor
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // Definindo a cultura padrão: pt-BR
-            var supportedCultures = new[] { new CultureInfo("pt-BR") };
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture(culture: "pt-BR", uiCulture: "pt-BR"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures
-            });
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
