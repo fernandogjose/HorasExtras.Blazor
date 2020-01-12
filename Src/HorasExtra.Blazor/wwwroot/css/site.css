@@ -419,3 +419,20 @@ app {
 .alinhamento-direira {
     text-align: right;
 }
+
+.table thead {
+    font-weight: bold;
+}
+
+.table th {
+    text-align: center
+}
+
+.table td {
+    text-align: center
+}
+
+.table tfoot {
+    background-color: #e9ecef66;
+    font-weight: bold;
+}

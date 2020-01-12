@@ -21,6 +21,9 @@ namespace HorasExtra.Application.ViewModels
         [Required(ErrorMessage = "Hora fim é obrigatório")]
         [StringLength(5, ErrorMessage = "Hora fim inválido")]
         public string HoraFim { get; set; }
+
+        [Required(ErrorMessage = "Justificativa é obrigatório")]
+        public string Justificativa { get; set; }
     }
 
     public class HorasCadastrarResponseViewModel
@@ -39,6 +42,8 @@ namespace HorasExtra.Application.ViewModels
         public string HoraInicio { get; set; }
 
         public string HoraFim { get; set; }
+
+        public string Justificativa { get; set; }
     }
 
     public class HorasListarRequestViewModel

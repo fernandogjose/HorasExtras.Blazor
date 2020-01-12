@@ -135,6 +135,13 @@
         </div>
     </div>
 
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label>Justificativa</label>
+            <InputTextArea id="justificativa" class="form-control" @bind-Value="request.Justificativa"></InputTextArea>
+        </div>
+    </div>
+
     @if (carregando)
     {
         <button class="btn btn-primary" disabled="disabled">Salvando...</button>
@@ -183,6 +190,7 @@
             request.Data = response.Data;
             request.HoraInicio = response.HoraInicio;
             request.HoraFim = response.HoraFim;
+            request.Justificativa = response.Justificativa;
         }
 
         base.OnInitialized();

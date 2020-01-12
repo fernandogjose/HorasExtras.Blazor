@@ -13,5 +13,7 @@ namespace HorasExtra.Domain.Models
         public string HoraInicio { get; set; }
 
         public string HoraFim { get; set; }
+
+        public string Justificativa { get; set; }
     }
 }

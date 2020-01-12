@@ -43,6 +43,13 @@ namespace HorasExtra.Repository.Repositories
             response.Data = Convert.ToDateTime(bsonDocument.GetValue("Data").ToString());
             response.HoraInicio = bsonDocument.GetValue("HoraInicio").ToString();
             response.HoraFim = bsonDocument.GetValue("HoraFim").ToString();
+            
+            bsonDocument.TryGetValue("Justificativa", out BsonValue bsonValueJustificativa);
+            if(bsonValueJustificativa != null)
+            {
+                response.Justificativa = bsonValueJustificativa.ToString();
+            }
+
             return response;
         }
 
@@ -73,7 +80,8 @@ namespace HorasExtra.Repository.Repositories
                     { "Desenvolvedor", request.Desenvolvedor.ToString() },
                     { "Data", request.Data.ToShortDateString() },
                     { "HoraInicio", request.HoraInicio.ToString() },
-                    { "HoraFim", request.HoraFim }
+                    { "HoraFim", request.HoraFim },
+                    { "Justificativa", request.Justificativa }
                 }
             );
 
@@ -88,7 +96,8 @@ namespace HorasExtra.Repository.Repositories
                 .Set("Desenvolvedor", request.Desenvolvedor.ToString())
                 .Set("Data", request.Data.ToShortDateString())
                 .Set("HoraInicio", request.HoraInicio.ToString())
-                .Set("HoraFim", request.HoraFim.ToString());
+                .Set("HoraFim", request.HoraFim.ToString())
+                .Set("Justificativa", request.Justificativa.ToString());
 
             _collection.UpdateOne(filter, bsonDocumentRequest);
         }

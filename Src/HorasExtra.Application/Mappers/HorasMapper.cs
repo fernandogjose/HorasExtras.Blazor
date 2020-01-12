@@ -22,7 +22,8 @@ namespace HorasExtra.Application.Mappers
                 Desenvolvedor = viewModel.Desenvolvedor,
                 Data = viewModel.Data,
                 HoraInicio = viewModel.HoraInicio,
-                HoraFim = viewModel.HoraFim
+                HoraFim = viewModel.HoraFim,
+                Justificativa = viewModel.Justificativa
             };
 
             return model;
@@ -36,7 +37,8 @@ namespace HorasExtra.Application.Mappers
                 Desenvolvedor = model.Desenvolvedor,
                 Data = model.Data,
                 HoraInicio = model.HoraInicio,
-                HoraFim = model.HoraFim
+                HoraFim = model.HoraFim,
+                Justificativa = model.Justificativa
             };
 
             return viewModel;

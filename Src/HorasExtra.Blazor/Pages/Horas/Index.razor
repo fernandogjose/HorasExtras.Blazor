@@ -33,6 +33,7 @@
                         <th>Data</th>
                         <th>Hora Inicio</th>
                         <th>Hora Fim</th>
+                        <th>Total</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -44,12 +45,28 @@
                             <td>@hora.Data.ToShortDateString()</td>
                             <td>@hora.HoraInicio</td>
                             <td>@hora.HoraFim</td>
+                            <td>
+                                @{
+                                    var horaInicio = new DateTime(2000, 01, 01, Convert.ToInt32(hora.HoraInicio.Split(':')[0]), Convert.ToInt32(hora.HoraInicio.Split(':')[1]), 0);
+                                    var horaFim = new DateTime(2000, 01, 01, Convert.ToInt32(hora.HoraFim.Split(':')[0]), Convert.ToInt32(hora.HoraFim.Split(':')[1]), 0);
+                                    TimeSpan ts = horaFim - horaInicio;
+                                    totalHorasExtras += ts.TotalHours;
+
+                                } @ts.TotalHours.ToString("0.##")
+                            </td>
                             <td class="alinhamento-direira">
                                 <a class="btn btn-primary" href="/horas/cadastrar/@hora.Id">Editar</a>
                             </td>
                         </tr>
                     }
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">Total</td>
+                        <td>@totalHorasExtras.ToString("0.##")</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         }
     </div>
@@ -60,6 +77,7 @@
     private Task<AuthenticationState> authenticationState { get; set; }
     private System.Security.Claims.ClaimsPrincipal claimsPrincipal;
     private List<HorasObterResponseViewModel> horas = new List<HorasObterResponseViewModel>(0);
+    private double totalHorasExtras = 0;
 
     protected override async void OnInitialized()
     {
