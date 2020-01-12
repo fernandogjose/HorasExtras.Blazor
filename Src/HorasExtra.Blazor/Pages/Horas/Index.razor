@@ -49,10 +49,11 @@
                                 @{
                                     var horaInicio = new DateTime(2000, 01, 01, Convert.ToInt32(hora.HoraInicio.Split(':')[0]), Convert.ToInt32(hora.HoraInicio.Split(':')[1]), 0);
                                     var horaFim = new DateTime(2000, 01, 01, Convert.ToInt32(hora.HoraFim.Split(':')[0]), Convert.ToInt32(hora.HoraFim.Split(':')[1]), 0);
-                                    TimeSpan ts = horaFim - horaInicio;
-                                    totalHorasExtras += ts.TotalHours;
+                                    TimeSpan totalHorasExtrasDiaTimeSpan = horaFim - horaInicio;
+                                    Double totalHorasExtrasDia = Math.Round(totalHorasExtrasDiaTimeSpan.TotalHours);
+                                    totalHorasExtras += totalHorasExtrasDia;
 
-                                } @ts.TotalHours.ToString("0.##")
+                                } @totalHorasExtrasDia.ToString("0.##")
                             </td>
                             <td class="alinhamento-direira">
                                 <a class="btn btn-primary" href="/horas/cadastrar/@hora.Id">Editar</a>
