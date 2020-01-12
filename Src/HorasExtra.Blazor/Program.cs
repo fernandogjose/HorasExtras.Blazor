@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.Globalization;
 
 namespace HorasExtra.Blazor
 {
@@ -7,6 +8,7 @@ namespace HorasExtra.Blazor
     {
         public static void Main(string[] args)
         {
+            CultureInfo.CurrentCulture = new CultureInfo("pt-BR");
             CreateHostBuilder(args).Build().Run();
         }
 
