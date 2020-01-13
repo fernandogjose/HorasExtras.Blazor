@@ -83,17 +83,17 @@ namespace HorasExtra.Blazor.Providers
             _sessionStorageService.SetItemAsync("uec", usuarioEmailCriptografado);
 
             // Cria o Claim
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, request.Nome) }, "HorasExtrasAuth");
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, request.Nome), new Claim(ClaimTypes.Role, request.Perfil) }, "HorasExtrasAuth");
             ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
         }
 
         public async void LogOut()
         {
-            await _sessionStorageService.RemoveItemAsync("ulc");
-            await _sessionStorageService.RemoveItemAsync("uec");
+            await _sessionStorageService.RemoveItemAsync("ulc").ConfigureAwait(false);
+            await _sessionStorageService.RemoveItemAsync("uec").ConfigureAwait(false);
 
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(await GetNewClaim())));
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(await GetNewClaim().ConfigureAwait(true))));
         }
     }
 }

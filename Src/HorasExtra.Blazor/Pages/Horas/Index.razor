@@ -4,6 +4,7 @@
 @page "/horas"
 @attribute [Authorize]
 @inject HorasPageService HorasPageService
+@inject UsuarioPageService UsuarioPageService
 
 <div class="row">
     <div class="col-md-10">
@@ -13,6 +14,29 @@
         <a href="/horas/cadastrar" class="btn btn-success">Novo</a>
     </div>
 </div>
+
+<AuthorizeView Roles="Admin">
+    <div class="container row top-15">
+        <EditForm OnValidSubmit="@Listar" Model="@horasListarRequestViewModel">
+            <ChildContent Context="Form">
+                <div class="form-row">
+                    <div class="col-md-10">
+                        <InputSelect id="desenvolvedor" @bind-Value="horasListarRequestViewModel.Desenvolvedor" class="form-control">
+                            <option value="">Selecione</option>
+                            @foreach (var desenvolvedor in desenvolvedores)
+                            {
+                                <option value="@desenvolvedor.Nome">@desenvolvedor.Nome</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+                    </div>
+                </div>
+            </ChildContent>
+        </EditForm>
+    </div>
+</AuthorizeView>
 
 <div class="row top-15">
     <div class="col-12 table-responsive">
@@ -79,6 +103,8 @@
     private System.Security.Claims.ClaimsPrincipal claimsPrincipal;
     private List<HorasObterResponseViewModel> horas = new List<HorasObterResponseViewModel>(0);
     private double totalHorasExtras = 0;
+    private HorasListarRequestViewModel horasListarRequestViewModel = new HorasListarRequestViewModel();
+    private List<UsuarioObterResponseViewModel> desenvolvedores = new List<UsuarioObterResponseViewModel>();
 
     protected override async void OnInitialized()
     {
@@ -87,7 +113,13 @@
             claimsPrincipal = (await authenticationState).User;
         }
 
+        desenvolvedores = UsuarioPageService.Listar();
         horas = HorasPageService.Listar(new HorasListarRequestViewModel { Desenvolvedor = claimsPrincipal.Identity.Name });
         base.OnInitialized();
+    }
+
+    private void Listar()
+    {
+        horas = HorasPageService.Listar(horasListarRequestViewModel);
     }
 }

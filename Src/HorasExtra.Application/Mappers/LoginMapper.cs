@@ -29,6 +29,7 @@ namespace HorasExtra.Application.Mappers
             {
                 Nome = model.Nome,
                 Email = model.Email,
+                Perfil = model.Perfil,
                 Erros = _erroMapper.DeModelParaViewModel(model.Erros)
             };
 

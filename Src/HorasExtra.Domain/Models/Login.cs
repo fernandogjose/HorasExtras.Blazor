@@ -10,6 +10,8 @@ namespace HorasExtra.Domain.Models
 
         public string Nome { get; set; }
 
+        public string Perfil { get; set; }
+
         public List<Erro> Erros { get; set; }
     }
 }

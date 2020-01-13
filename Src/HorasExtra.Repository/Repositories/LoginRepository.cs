@@ -27,6 +27,7 @@ namespace HorasExtra.Repository.Repositories
             Login response = new Login();
             response.Email = bsonDocument.GetValue("Email").ToString();
             response.Nome = bsonDocument.GetValue("Nome").ToString();
+            response.Perfil = bsonDocument.GetValue("Perfil").ToString();
             return response;
         }
 

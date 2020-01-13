@@ -19,6 +19,29 @@ namespace HorasExtra.Repository.Repositories
             _collection = _mongoHelper.MongoDatabase.GetCollection<BsonDocument>("Usuario");
         }
 
+        private List<Usuario> Map(List<BsonDocument> bsonDocuments)
+        {
+            List<Usuario> response = new List<Usuario>();
+            foreach (var bsonDocument in bsonDocuments)
+            {
+                Usuario usuario = Map(bsonDocument);
+                response.Add(usuario);
+            }
+            return response;
+        }
+
+        private Usuario Map(BsonDocument bsonDocument)
+        {
+            if (bsonDocument == null)
+            {
+                return new Usuario();
+            }
+
+            Usuario response = new Usuario();
+            response.Nome = bsonDocument.GetValue("Nome").ToString();
+            return response;
+        }
+
         public void Adicionar(Usuario request)
         {
             var bsonDocumentRequest = new BsonDocument(
@@ -26,10 +49,21 @@ namespace HorasExtra.Repository.Repositories
                     { "Nome", request.Nome.ToString() },
                     { "Email", request.Email },
                     { "Senha", request.Senha.ToString() },
+                    { "Perfil", request.Perfil.ToString() },
                 }
             );
 
             _collection.InsertOne(bsonDocumentRequest);
+        }
+
+        public List<Usuario> Listar()
+        {
+            FilterDefinitionBuilder<BsonDocument> builder = Builders<BsonDocument>.Filter;
+            FilterDefinition<BsonDocument> filter = builder.Empty;
+            List<BsonDocument> bsonDocuments = _collection.Find(filter).ToList();
+
+            List<Usuario> response = Map(bsonDocuments);
+            return response;
         }
     }
 }

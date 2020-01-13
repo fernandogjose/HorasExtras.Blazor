@@ -13,10 +13,18 @@ namespace HorasExtra.Application.ViewModels
 
         [Required(ErrorMessage = "Senha é obrigatório")]
         public string Senha { get; set; }
+
+        [Required(ErrorMessage = "Perfil")]
+        public string Perfil { get; set; }
     }
 
     public class UsuarioCadastrarResponseViewModel
     {
         List<ErroViewModel> Erros { get; set; }
+    }
+
+    public class UsuarioObterResponseViewModel
+    {
+        public string Nome { get; set; }
     }
 }
